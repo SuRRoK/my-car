@@ -13,6 +13,6 @@ return static function (ContainerConfigurator $di): void {
         ->autowire()
         ->autoconfigure();
 
-
+    $services->set(TestController::class);
 //    $services->set('my_business_feature.some_service', \stdClass::class);
 };
