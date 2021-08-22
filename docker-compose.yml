@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+    php:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+        environment:
+            - PHP_IDE_CONFIG=serverName=PHP
+            - APP_SECRET=91fd9b52763f9b24f0e515464466798fe2fb6c51533765b60dad9559f772bc56
+        volumes:
+            - .:/app
+        depends_on:
+            - postgres
+
+    postgres:
+        image: postgres:13.3-alpine
+        environment:
+            POSTGRES_USER: app
+            POSTGRES_PASSWORD: secret
+            POSTGRES_DB: app-db
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        ports:
+            - "54321:5432"
+    nginx:
+        build:
+            context: docker
+            dockerfile: nginx/Dockerfile
+        environment:
+            - PHP_IDE_CONFIG="serverName=PHP"
+        volumes:
+            - .:/app:ro
+        ports:
+            - 54080:80
+        depends_on:
+            - php
+
+    mailhog:
+        # do not use in production!
+        image: mailhog/mailhog:latest
+        environment:
+            - MH_STORAGE=maildir
+        ports:
+            - "54025:8025"
+
+volumes:
+    postgres-data:
