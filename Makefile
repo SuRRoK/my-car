@@ -43,7 +43,7 @@ docker-stop:
 docker-build:
 	docker-compose build
 
-init: docker-stop docker-start composer-install permissions migrate assets-install show_local_urls
+init: docker-stop docker-start composer-install permissions show_local_urls
 
 lint:
 	docker-compose run --rm $(APP_CONTAINER_NAME) composer lint
@@ -75,7 +75,7 @@ shell.nginx:
 	docker-compose exec nginx sh
 
 permissions:
-	docker run --rm -v ${PWD}/:/srv/sylius -w /srv/sylius alpine chmod 777 var/cache var/log
+	docker run --rm -v ${PWD}/:/app -w /app alpine chmod 777 var/cache var/log
 
 frontend:
 	yarn

@@ -12,6 +12,6 @@ final class TestController extends AbstractController
 {
     public function index(Request $request): Response
     {
-        return $this->render('test/index.html.twig');
+        return new Response('Hello - test');
     }
 }
